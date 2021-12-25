@@ -10,6 +10,8 @@ const PUBLIC_PATH = path.resolve(__dirname, '../public');
 const UPLOAD_PATH = path.resolve(__dirname, '../upload');
 const DIST_PATH = path.resolve(__dirname, '../dist');
 
+const env = process.env.NODE_ENV || 'development';
+
 /** @type {import('webpack').Configuration} */
 const config = {
   devServer: {
@@ -32,7 +34,7 @@ const config = {
       path.resolve(SRC_PATH, './index.jsx'),
     ],
   },
-  mode: 'none',
+  mode: env,
   module: {
     rules: [
       {
@@ -65,7 +67,7 @@ const config = {
       BUILD_DATE: new Date().toISOString(),
       // Heroku では SOURCE_VERSION 環境変数から commit hash を参照できます
       COMMIT_HASH: process.env.SOURCE_VERSION || '',
-      NODE_ENV: 'development',
+      NODE_ENV: env,
     }),
     new MiniCssExtractPlugin({
       filename: 'styles/[name].css',
