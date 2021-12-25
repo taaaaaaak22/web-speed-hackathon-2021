@@ -58,7 +58,9 @@ const PostItem = ({ post }) => {
           ) : null}
           <p className="mt-2 text-sm sm:mt-4">
             <Link className="text-gray-500 hover:underline" to={`/posts/${post.id}`}>
-              <time dateTime={dayjs(post.createdAt).toISOString()}>{dayjs(post.createdAt).format('LL')}</time>
+              <time dateTime={dayjs(post.createdAt).toISOString()}>
+                {dayjs(post.createdAt).format('YYYY年MM月DD日')}
+              </time>
             </Link>
           </p>
         </div>
