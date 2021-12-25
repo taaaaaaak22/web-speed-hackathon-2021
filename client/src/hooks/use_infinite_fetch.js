@@ -18,17 +18,17 @@ const LIMIT = 10;
  * @returns {ReturnValues<T>}
  */
 export function useInfiniteFetch(apiPath, fetcher) {
-  const internalRef = React.useRef({ isLoading: false, offset: 0 });
+  const internalRef = React.useRef({ isLoading: false, offset: 0, isLoadedAllData: false });
 
   const [result, setResult] = React.useState({
     data: [],
     error: null,
-    isLoading: true,
+    isLoading: false,
   });
 
   const fetchMore = React.useCallback(() => {
-    const { isLoading, offset } = internalRef.current;
-    if (isLoading) {
+    const { isLoading, offset, isLoadedAllData } = internalRef.current;
+    if (isLoading || isLoadedAllData) {
       return;
     }
 
@@ -36,23 +36,23 @@ export function useInfiniteFetch(apiPath, fetcher) {
       ...cur,
       isLoading: true,
     }));
-    internalRef.current = {
-      isLoading: true,
-      offset,
-    };
+    internalRef.current.isLoading = true;
 
-    const promise = fetcher(apiPath);
+    const promise = fetcher(apiPath, { offset, limit: LIMIT });
 
-    promise.then((allData) => {
+    promise.then((data) => {
       setResult((cur) => ({
         ...cur,
-        data: [...cur.data, ...allData.slice(offset, offset + LIMIT)],
+        data: [...cur.data, ...data],
         isLoading: false,
       }));
-      internalRef.current = {
-        isLoading: false,
-        offset: offset + LIMIT,
-      };
+      internalRef.current.isLoading = false;
+      internalRef.current.offset = offset + LIMIT;
+
+      if (data.length === 0) {
+        internalRef.current.isLoadedAllData = true;
+        return;
+      }
     });
 
     promise.catch((error) => {
@@ -61,26 +61,12 @@ export function useInfiniteFetch(apiPath, fetcher) {
         error,
         isLoading: false,
       }));
-      internalRef.current = {
-        isLoading: false,
-        offset,
-      };
     });
   }, [apiPath, fetcher]);
 
   React.useEffect(() => {
-    setResult(() => ({
-      data: [],
-      error: null,
-      isLoading: true,
-    }));
-    internalRef.current = {
-      isLoading: false,
-      offset: 0,
-    };
-
     fetchMore();
-  }, [fetchMore]);
+  }, []);
 
   return {
     ...result,
