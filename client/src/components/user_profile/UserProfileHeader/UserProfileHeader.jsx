@@ -38,7 +38,7 @@ const UserProfileHeader = ({ user }) => {
             <FontAwesomeIcon iconType="calendar-alt" styleType="regular" />
           </span>
           <span>
-            <time dateTime={dayjs(user.createdAt).toISOString()}>{dayjs(user.createdAt).format('YYYY年MM月DD日')}</time>
+            <time dateTime={dayjs(user.createdAt).toISOString()}>{dayjs(user.createdAt).format('YYYY年M月D日')}</time>
             からサービスを利用しています
           </span>
         </p>
