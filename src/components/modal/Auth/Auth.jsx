@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { AuthModalPage } from '../../auth_modal/AuthModalPage'
-import { Modal } from '../modal/Modal'
+import { Modal } from '../Modal'
 import { sendJSON } from '../../../utils/fetchers'
 
 /**

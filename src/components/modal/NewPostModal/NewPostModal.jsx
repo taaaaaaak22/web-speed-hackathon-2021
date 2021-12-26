@@ -1,7 +1,7 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 
-import { Modal } from '../modal/Modal'
+import { Modal } from '../Modal'
 import { NewPostModalPage } from '../../new_post_modal/NewPostModalPage'
 import { sendFile, sendJSON } from '../../../utils/fetchers'
 
