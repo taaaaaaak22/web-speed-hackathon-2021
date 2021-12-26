@@ -22,6 +22,11 @@ const PausableMovie = ({ src }) => {
   const [isPlaying, setIsPlaying] = React.useState(true)
   const handleClick = React.useCallback(() => {
     setIsPlaying((isPlaying) => {
+      // 視覚効果 off のときは自動再生しない
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        videoRef.current.pause()
+      }
+
       if (isPlaying) {
         videoRef.current.pause()
       } else {
@@ -52,7 +57,7 @@ const PausableMovie = ({ src }) => {
         onClick={handleClick}
         type="button"
       >
-        <video ref={videoRef} muted loop className="w-full">
+        <video ref={videoRef} muted loop autoPlay className="w-full">
           <source src={src} type="video/mp4" />
         </video>
         <div className={playClass}>
