@@ -20,14 +20,6 @@ expressApp.use(
 expressApp.use(bodyParser.json())
 expressApp.use(bodyParser.raw({ limit: '10mb' }))
 
-expressApp.use((_req, res, next) => {
-  res.header({
-    'Cache-Control': 'max-age=0, no-transform',
-    Connection: 'close',
-  })
-  return next()
-})
-
 expressApp.use('/api/v1', apiRouter)
 expressApp.use(staticRouter)
 

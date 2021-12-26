@@ -1,5 +1,3 @@
-import { Animator, Decoder } from 'gifler'
-import { GifReader } from 'omggif'
 import React from 'react'
 
 import { useFetch } from '../../../hooks/use_fetch'
@@ -19,46 +17,15 @@ import { FontAwesomeIcon } from '../FontAwesomeIcon'
 const PausableMovie = ({ src }) => {
   const { data, isLoading } = useFetch(src, fetchBinary)
 
-  /** @type {React.RefObject<import('gifler').Animator>} */
-  const animatorRef = React.useRef(null)
-  /** @type {React.RefCallback<HTMLCanvasElement>} */
-  const canvasCallbackRef = React.useCallback(
-    (el) => {
-      animatorRef.current?.stop()
-
-      if (el === null || data === null) {
-        return
-      }
-
-      // GIF を解析する
-      const reader = new GifReader(new Uint8Array(data))
-      const frames = Decoder.decodeFramesSync(reader)
-      const animator = new Animator(reader, frames)
-
-      animator.animateInCanvas(el)
-      animator.onFrame(frames[0])
-
-      // 視覚効果 off のとき GIF を自動再生しない
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        setIsPlaying(false)
-        animator.stop()
-      } else {
-        setIsPlaying(true)
-        animator.start()
-      }
-
-      animatorRef.current = animator
-    },
-    [data]
-  )
+  const videoRef = React.useRef(null)
 
   const [isPlaying, setIsPlaying] = React.useState(true)
   const handleClick = React.useCallback(() => {
     setIsPlaying((isPlaying) => {
       if (isPlaying) {
-        animatorRef.current?.stop()
+        videoRef.current.pause()
       } else {
-        animatorRef.current?.start()
+        videoRef.current.play()
       }
       return !isPlaying
     })
@@ -85,7 +52,9 @@ const PausableMovie = ({ src }) => {
         onClick={handleClick}
         type="button"
       >
-        <canvas ref={canvasCallbackRef} className="w-full" />
+        <video ref={videoRef} muted loop autoPlay className="w-full">
+          <source src={src} type="video/mp4" />
+        </video>
         <div className={playClass}>
           <FontAwesomeIcon
             iconType={isPlaying ? 'pause' : 'play'}
