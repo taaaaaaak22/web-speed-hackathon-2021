@@ -20,13 +20,15 @@ const PausableMovie = ({ src }) => {
   const videoRef = React.useRef(null)
 
   const [isPlaying, setIsPlaying] = React.useState(true)
+
+  // 視覚効果 off のときは自動再生しない
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    videoRef.current.pause()
+    setIsPlaying(false)
+  }
+
   const handleClick = React.useCallback(() => {
     setIsPlaying((isPlaying) => {
-      // 視覚効果 off のときは自動再生しない
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        videoRef.current.pause()
-      }
-
       if (isPlaying) {
         videoRef.current.pause()
       } else {
