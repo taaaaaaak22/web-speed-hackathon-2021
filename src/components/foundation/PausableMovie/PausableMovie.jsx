@@ -52,7 +52,7 @@ const PausableMovie = ({ src }) => {
         onClick={handleClick}
         type="button"
       >
-        <video ref={videoRef} muted loop autoPlay className="w-full">
+        <video ref={videoRef} muted loop className="w-full">
           <source src={src} type="video/mp4" />
         </video>
         <div className={playClass}>
