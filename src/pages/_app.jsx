@@ -44,7 +44,7 @@ function MyApp({ Component, pageProps }) {
     )
   }
 
-  if (process.browser) {
+  if (typeof window !== 'undefined') {
     window.__BUILD_INFO__ = {
       BUILD_DATE: process.env.BUILD_DATE,
       COMMIT_HASH: process.env.COMMIT_HASH,
