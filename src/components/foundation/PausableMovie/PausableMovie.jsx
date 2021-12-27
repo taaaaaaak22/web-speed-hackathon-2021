@@ -16,8 +16,6 @@ import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons'
  * @type {React.VFC<Props>}
  */
 const PausableMovie = ({ src }) => {
-  const { data, isLoading } = useFetch(src, fetchBinary)
-
   const videoRef = React.useRef(null)
 
   const [isPlaying, setIsPlaying] = React.useState(true)
@@ -53,10 +51,6 @@ const PausableMovie = ({ src }) => {
     }
     setPlayClass(baseName)
   }, [isPlaying])
-
-  if (isLoading || data === null) {
-    return null
-  }
 
   return (
     <AspectRatioBox aspectHeight={1} aspectWidth={1}>
