@@ -9,7 +9,7 @@ const { convertMovie } = require('../../converters/convert_movie')
 const { UPLOAD_PATH } = require('../../paths')
 
 // 変換した動画の拡張子
-const EXTENSION = 'mp4'
+const EXTENSION = 'webm'
 
 const router = Router()
 

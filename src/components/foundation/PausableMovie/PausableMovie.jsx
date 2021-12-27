@@ -71,7 +71,7 @@ const PausableMovie = ({ src }) => {
           autoPlay={isPlaying}
           className="w-full"
         >
-          <source src={src} type="video/mp4" />
+          <source src={src} type="video/webm" />
         </video>
         <div className={playClass}>
           <FontAwesomeIcon
