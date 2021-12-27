@@ -9,32 +9,15 @@ import { useInfiniteFetch } from '../../hooks/use_infinite_fetch'
 import { fetchJSON } from '../../utils/fetchers'
 
 /** @type {React.VFC} */
-const UserProfileContainer = () => {
+const UserProfileContainer = ({ initialData, user }) => {
   const router = useRouter()
   const username = router.query.name
 
-  const { data: user, isLoading: isLoadingUser } = useFetch(
-    `/api/v1/users/${username}`,
-    fetchJSON
-  )
   const { data: posts, fetchMore } = useInfiniteFetch(
     `/api/v1/users/${username}/posts`,
-    fetchJSON
+    fetchJSON,
+    initialData
   )
-
-  if (isLoadingUser) {
-    return (
-      <HelmetProvider>
-        <Helmet>
-          <title>読込中 - CAwitter</title>
-        </Helmet>
-      </HelmetProvider>
-    )
-  }
-
-  if (user === null) {
-    return router.push('/404')
-  }
 
   return (
     <>
@@ -48,6 +31,24 @@ const UserProfileContainer = () => {
       </InfiniteScroll>
     </>
   )
+}
+
+UserProfileContainer.getInitialProps = async (ctx) => {
+  const username = ctx.query ? ctx.query.name : ctx.pathname.split('/')[1]
+  const fetchUser = fetch(
+    `${process.env.BASE_URL}://${ctx.req.headers.host}/api/v1/users/${username}`
+  )
+
+  const fetchPosts = await fetch(
+    `${process.env.BASE_URL}/api/v1/users/${username}/posts`
+  )
+  const [userResponse, postsRepsonse] = await Promise.all([
+    fetchUser,
+    fetchPosts,
+  ])
+  const user = await userResponse.json()
+  const posts = await postsRepsonse.json()
+  return { initialData: posts, user }
 }
 
 export default UserProfileContainer

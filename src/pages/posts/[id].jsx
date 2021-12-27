@@ -9,33 +9,14 @@ import { useInfiniteFetch } from '../../hooks/use_infinite_fetch'
 import { fetchJSON } from '../../utils/fetchers'
 
 /** @type {React.VFC} */
-const PostContainer = () => {
-  const router = useRouter()
+const PostContainer = ({ initialData, post }) => {
   const { query } = useRouter()
-
-  const { data: post, isLoading: isLoadingPost } = useFetch(
-    `/api/v1/posts/${query.id}`,
-    fetchJSON
-  )
 
   const { data: comments, fetchMore } = useInfiniteFetch(
     `/api/v1/posts/${query.id}/comments`,
-    fetchJSON
+    fetchJSON,
+    initialData
   )
-
-  if (isLoadingPost) {
-    return (
-      <HelmetProvider>
-        <Helmet>
-          <title>読込中 - CAwitter</title>
-        </Helmet>
-      </HelmetProvider>
-    )
-  }
-
-  if (post === null) {
-    return router.push('/404')
-  }
 
   return (
     <>
@@ -49,6 +30,22 @@ const PostContainer = () => {
       </InfiniteScroll>
     </>
   )
+}
+
+PostContainer.getInitialProps = async (ctx) => {
+  const id = ctx.query ? ctx.query.id : ctx.pathname.split('/')[2]
+  const fetchPost = fetch(`${process.env.BASE_URL}/api/v1/posts/${id}`)
+
+  const fetchComments = await fetch(
+    `${process.env.BASE_URL}/api/v1/posts/${id}/comments`
+  )
+  const [postResponse, comentsRepsonse] = await Promise.all([
+    fetchPost,
+    fetchComments,
+  ])
+  const post = await postResponse.json()
+  const comments = await comentsRepsonse.json()
+  return { initialData: comments, post }
 }
 
 export default PostContainer

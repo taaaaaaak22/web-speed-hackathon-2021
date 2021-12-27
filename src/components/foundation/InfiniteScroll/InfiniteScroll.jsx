@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 /**
  * @typedef {object} Props
@@ -9,31 +9,33 @@ import React from 'react';
 
 /** @type {React.VFC<Props>} */
 const InfiniteScroll = ({ children, fetchMore }) => {
-  const prevReachedRef = React.useRef(false);
+  const prevReachedRef = React.useRef(false)
 
   React.useEffect(() => {
     const handler = () => {
-      const hasReached = window.innerHeight + Math.ceil(window.scrollY) >= document.body.offsetHeight;
+      const hasReached =
+        window.innerHeight + Math.ceil(window.scrollY) >=
+        document.body.offsetHeight
 
       // 画面最下部にスクロールしたタイミングで、登録したハンドラを呼び出す
       if (hasReached && !prevReachedRef.current) {
-        fetchMore();
+        fetchMore()
       }
 
-      prevReachedRef.current = hasReached;
-    };
+      prevReachedRef.current = hasReached
+    }
 
     // 最初は実行されないので手動で呼び出す
-    prevReachedRef.current = false;
-    handler();
+    prevReachedRef.current = false
+    handler()
 
-    document.addEventListener('scroll', handler, { passive: false });
+    document.addEventListener('scroll', handler, { passive: false })
     return () => {
-      document.removeEventListener('scroll', handler);
-    };
-  }, []);
+      document.removeEventListener('scroll', handler)
+    }
+  }, [])
 
-  return <>{children}</>;
-};
+  return <>{children}</>
+}
 
-export { InfiniteScroll };
+export { InfiniteScroll }

@@ -18,6 +18,10 @@ const config = {
     BUILD_DATE: new Date().toISOString(),
     // Heroku では SOURCE_VERSION 環境変数から commit hash を参照できます
     COMMIT_HASH: process.env.SOURCE_VERSION || '',
+    BASE_URL:
+      process.env.NODE_ENV === 'production'
+        ? 'http://web-speed-hackathon-2021-app.herokuapp.com'
+        : 'http://localhost:3000',
   },
 }
 

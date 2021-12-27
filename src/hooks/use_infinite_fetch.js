@@ -17,20 +17,20 @@ const LIMIT = 20
  * @param {(apiPath: string) => Promise<T[]>} fetcher
  * @returns {ReturnValues<T>}
  */
-export function useInfiniteFetch(apiPath, fetcher) {
+export function useInfiniteFetch(apiPath, fetcher, initialData = []) {
   const internalRef = React.useRef({
     isLoading: false,
-    offset: 0,
+    offset: initialData.length,
     isLoadedAllData: false,
   })
 
   const [result, setResult] = React.useState({
-    data: [],
+    data: initialData,
     error: null,
     isLoading: false,
   })
 
-  const fetchMore = React.useCallback(() => {
+  const fetchMore = () => {
     const { isLoading, offset, isLoadedAllData } = internalRef.current
     if (isLoading || isLoadedAllData) {
       return
@@ -42,35 +42,29 @@ export function useInfiniteFetch(apiPath, fetcher) {
     }))
     internalRef.current.isLoading = true
 
-    const promise = fetcher(apiPath, { offset, limit: LIMIT })
+    return fetcher(apiPath, { offset, limit: LIMIT })
+      .then((data) => {
+        setResult((cur) => ({
+          ...cur,
+          data: data ? [...cur.data, ...data] : [...cur.data],
+          isLoading: false,
+        }))
+        internalRef.current.isLoading = false
+        internalRef.current.offset = offset + LIMIT
 
-    promise.then((data) => {
-      setResult((cur) => ({
-        ...cur,
-        data: data ? [...cur.data, ...data] : [...cur.data],
-        isLoading: false,
-      }))
-      internalRef.current.isLoading = false
-      internalRef.current.offset = offset + LIMIT
-
-      if (!data || data.length === 0) {
-        internalRef.current.isLoadedAllData = true
-        return
-      }
-    })
-
-    promise.catch((error) => {
-      setResult((cur) => ({
-        ...cur,
-        error,
-        isLoading: false,
-      }))
-    })
-  }, [apiPath, fetcher])
-
-  React.useEffect(() => {
-    fetchMore()
-  }, [fetchMore])
+        if (!data || data.length === 0) {
+          internalRef.current.isLoadedAllData = true
+          return
+        }
+      })
+      .catch((error) => {
+        setResult((cur) => ({
+          ...cur,
+          error,
+          isLoading: false,
+        }))
+      })
+  }
 
   return {
     ...result,
