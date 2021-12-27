@@ -1,4 +1,5 @@
-import React from 'react';
+import React from 'react'
+import { FontAwesomeIcon as FontAwesomeIconLib } from '@fortawesome/react-fontawesome'
 
 /**
  * @typedef {object} Props
@@ -7,12 +8,16 @@ import React from 'react';
  */
 
 /** @type {React.VFC<Props>} */
-const FontAwesomeIcon = ({ iconType, styleType }) => {
+const FontAwesomeIcon = ({ icon }) => {
   return (
-    <svg className="font-awesome inline-block leading-none fill-current">
-      <use xlinkHref={`/sprites/font-awesome/${styleType}.svg#${iconType}`} />
-    </svg>
-  );
-};
+    <span>
+      <FontAwesomeIconLib
+        icon={icon}
+        className="inline-block leading-none fill-current"
+        style={{ height: '1em', verticalAlign: '-0.125em', width: '1em' }}
+      ></FontAwesomeIconLib>
+    </span>
+  )
+}
 
-export { FontAwesomeIcon };
+export { FontAwesomeIcon }

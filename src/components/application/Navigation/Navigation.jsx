@@ -2,6 +2,13 @@ import React from 'react'
 
 import { FontAwesomeIcon } from '../../foundation/FontAwesomeIcon'
 import { NavigationItem } from '../NavigationItem'
+import {
+  faHome,
+  faEdit,
+  faUser,
+  faSignInAlt,
+  faBalanceScale,
+} from '@fortawesome/free-solid-svg-icons'
 
 /**
  * @typedef {object} Props
@@ -21,12 +28,12 @@ const Navigation = ({
       <ul className="relative grid grid-flow-col items-center justify-evenly lg:fixed lg:gap-2 lg:grid-flow-row lg:justify-start lg:p-2 lg:w-48 lg:h-full lg:auto-rows-min">
         <NavigationItem
           href="/"
-          icon={<FontAwesomeIcon iconType="home" styleType="solid" />}
+          icon={<FontAwesomeIcon icon={faHome} />}
           text="ホーム"
         />
         {activeUser !== null ? (
           <NavigationItem
-            icon={<FontAwesomeIcon iconType="edit" styleType="solid" />}
+            icon={<FontAwesomeIcon icon={faEdit} />}
             onClick={onRequestOpenPostModal}
             text="投稿する"
           />
@@ -35,14 +42,14 @@ const Navigation = ({
         {activeUser !== null ? (
           <NavigationItem
             href={`/users/${activeUser.username}`}
-            icon={<FontAwesomeIcon iconType="user" styleType="solid" />}
+            icon={<FontAwesomeIcon icon={faUser} />}
             text="マイページ"
           />
         ) : null}
 
         {activeUser === null ? (
           <NavigationItem
-            icon={<FontAwesomeIcon iconType="sign-in-alt" styleType="solid" />}
+            icon={<FontAwesomeIcon icon={faSignInAlt} />}
             onClick={onRequestOpenAuthModal}
             text="サインイン"
           />
@@ -50,7 +57,7 @@ const Navigation = ({
 
         <NavigationItem
           href="/terms"
-          icon={<FontAwesomeIcon iconType="balance-scale" styleType="solid" />}
+          icon={<FontAwesomeIcon icon={faBalanceScale} />}
           text="利用規約"
         />
       </ul>
