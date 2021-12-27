@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 /**
  * @typedef {object} Props
@@ -13,30 +13,36 @@ import React from 'react';
  */
 const AspectRatioBox = ({ aspectHeight, aspectWidth, children }) => {
   /** @type {React.RefObject<HTMLDivElement>} */
-  const ref = React.useRef(null);
-  const [clientHeight, setClientHeight] = React.useState(0);
+  const ref = React.useRef(null)
+  const [clientHeight, setClientHeight] = React.useState(0)
 
   React.useEffect(() => {
     // clientWidth とアスペクト比から clientHeight を計算する
     function calcStyle() {
-      const clientWidth = ref.current.clientWidth;
-      setClientHeight((clientWidth / aspectWidth) * aspectHeight);
+      const clientWidth = ref.current.clientWidth
+      setClientHeight((clientWidth / aspectWidth) * aspectHeight)
     }
-    setTimeout(() => calcStyle(), 500);
+    setTimeout(() => calcStyle(), 0)
 
     // ウィンドウサイズが変わるたびに計算する
-    window.addEventListener('resize', calcStyle, { passive: false });
+    window.addEventListener('resize', calcStyle, { passive: false })
     return () => {
-      window.removeEventListener('resize', calcStyle);
-    };
-  }, [aspectHeight, aspectWidth]);
+      window.removeEventListener('resize', calcStyle)
+    }
+  }, [aspectHeight, aspectWidth])
 
   return (
-    <div ref={ref} className="relative w-full h-1" style={{ height: clientHeight }}>
+    <div
+      ref={ref}
+      className="relative w-full h-1"
+      style={{ height: clientHeight }}
+    >
       {/* 高さが計算できるまで render しない */}
-      {clientHeight !== 0 ? <div className="absolute inset-0">{children}</div> : null}
+      {clientHeight !== 0 ? (
+        <div className="absolute inset-0">{children}</div>
+      ) : null}
     </div>
-  );
-};
+  )
+}
 
-export { AspectRatioBox };
+export { AspectRatioBox }

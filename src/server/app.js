@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser')
 const Express = require('express')
+const compression = require('compression')
 const session = require('express-session')
 
 const { apiRouter } = require('./routes/api')
@@ -8,6 +9,7 @@ const { staticRouter } = require('./routes/static')
 const expressApp = Express()
 
 expressApp.set('trust proxy', true)
+expressApp.use(compression())
 
 expressApp.use(
   session({
