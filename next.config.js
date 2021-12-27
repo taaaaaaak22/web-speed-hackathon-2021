@@ -1,6 +1,6 @@
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-})
+// const withBundleAnalyzer = require('@next/bundle-analyzer')({
+//   enabled: process.env.ANALYZE === 'true',
+// })
 
 const config = {
   reactStrictMode: true,
@@ -21,4 +21,4 @@ const config = {
   },
 }
 
-module.exports = withBundleAnalyzer(config)
+module.exports = config // withBundleAnalyzer(config)
