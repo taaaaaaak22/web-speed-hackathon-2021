@@ -1,5 +1,5 @@
 import { gzip } from 'pako'
-import $ from 'jquery'
+// import $ from 'jquery'
 
 /**
  * @param {string} url
@@ -34,20 +34,6 @@ async function fetchJSON(url, data) {
     console.log(error)
     return null
   }
-
-  // try {
-  //   const result = await $.ajax({
-  //     async: false,
-  //     dataType: 'json',
-  //     method: 'GET',
-  //     url,
-  //     data,
-  //   })
-  //   return result
-  // } catch (error) {
-  //   console.log(error)
-  //   return null
-  // }
 }
 
 /**
@@ -57,18 +43,26 @@ async function fetchJSON(url, data) {
  * @returns {Promise<T>}
  */
 async function sendFile(url, file) {
-  const result = await $.ajax({
-    async: false,
-    data: file,
-    dataType: 'json',
+  const result = await fetch(url, {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/octet-stream',
     },
-    method: 'POST',
-    processData: false,
-    url,
+    body: file,
   })
-  return result
+
+  // const result = await $.ajax({
+  //   async: false,
+  //   data: file,
+  //   dataType: 'json',
+  //   headers: {
+  //     'Content-Type': 'application/octet-stream',
+  //   },
+  //   method: 'POST',
+  //   processData: false,
+  //   url,
+  // })
+  return result.json()
 }
 
 /**
@@ -82,19 +76,27 @@ async function sendJSON(url, data) {
   const uint8Array = new TextEncoder().encode(jsonString)
   const compressed = gzip(uint8Array)
 
-  const result = await $.ajax({
-    async: false,
-    data: compressed,
-    dataType: 'json',
+  const result = await fetch(url, {
+    method: 'POST',
     headers: {
       'Content-Encoding': 'gzip',
       'Content-Type': 'application/json',
     },
-    method: 'POST',
-    processData: false,
-    url,
+    body: compressed,
   })
-  return result
+
+  // const result = await $.ajax({
+  //   async: false,
+  //   data: compressed,
+  //   dataType: 'json',
+  //   headers: {
+  //     'Content-Encoding': 'gzip',
+  //     'Content-Type': 'application/json',
+  //   },
+  //   processData: false,
+  //   url,
+  // })
+  return result.json()
 }
 
 export { fetchBinary, fetchJSON, sendFile, sendJSON }

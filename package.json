@@ -8,7 +8,8 @@
     "dev": "node ./src/server/index.js",
     "build": "next build",
     "start": "NODE_ENV=production node ./src/server/index.js",
-    "lint": "next lint"
+    "lint": "next lint",
+    "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
     "@ffmpeg/core": "^0.10.0",
@@ -42,6 +43,7 @@
     "wicg-inert": "^3.1.1"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^12.0.7",
     "autoprefixer": "^10.4.0",
     "eslint": "8.5.0",
     "eslint-config-next": "12.0.7",

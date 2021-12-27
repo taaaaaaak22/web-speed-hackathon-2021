@@ -1,7 +1,10 @@
 import React from 'react'
+import dynamic from 'next/dynamic'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 
-import { TermPage } from '../components/term/TermPage'
+const TermPage = dynamic(() =>
+  import('../components/term/TermPage').then((mod) => mod.TermPage)
+)
 
 /** @type {React.VFC} */
 const TermContainer = () => {

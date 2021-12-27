@@ -1,4 +1,8 @@
-module.exports = {
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
+
+const config = {
   reactStrictMode: true,
   webpack: (config, { isServer }) => {
     if (!isServer) {
@@ -16,3 +20,5 @@ module.exports = {
     COMMIT_HASH: process.env.SOURCE_VERSION || '',
   },
 }
+
+module.exports = withBundleAnalyzer(config)
