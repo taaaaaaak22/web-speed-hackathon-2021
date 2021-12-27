@@ -17,8 +17,6 @@ import { fetchBinary } from '../../../utils/fetchers'
  */
 const CoveredImage = ({ alt, src }) => {
   const { data, isLoading } = useFetch(src, fetchBinary)
-  console.log(data)
-
   const imageSize = React.useMemo(() => {
     return data !== null ? sizeOf(Buffer.from(data)) : null
   }, [data])
