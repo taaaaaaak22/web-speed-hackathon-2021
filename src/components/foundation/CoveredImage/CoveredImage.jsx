@@ -1,4 +1,4 @@
-import sizeOf from 'image-size'
+// import sizeOf from 'image-size'
 import React from 'react'
 // import Image from 'next/image'
 
@@ -17,50 +17,21 @@ import { fetchBinary } from '../../../utils/fetchers'
  */
 const CoveredImage = ({ alt, src }) => {
   const { data, isLoading } = useFetch(src, fetchBinary)
-  const imageSize = React.useMemo(() => {
-    return data !== null ? sizeOf(Buffer.from(data)) : null
-  }, [data])
 
-  const blobUrl = React.useMemo(() => {
-    return data !== null ? URL.createObjectURL(new Blob([data])) : null
-  }, [data])
-
-  const [containerSize, setContainerSize] = React.useState({
-    height: 0,
-    width: 0,
-  })
-  /** @type {React.RefCallback<HTMLDivElement>} */
-  const callbackRef = React.useCallback((el) => {
-    setContainerSize({
-      height: el?.clientHeight ?? 0,
-      width: el?.clientWidth ?? 0,
-    })
-  }, [])
-
-  const containerRatio = containerSize.height / containerSize.width
-  const imageRatio = imageSize?.height / imageSize?.width
-
-  const [imageClass, setImageClass] = React.useState('')
-  React.useEffect(() => {
-    let baseName =
-      'absolute left-1/2 top-1/2 max-w-none transform -translate-x-1/2 -translate-y-1/2'
-    if (containerRatio > imageRatio) {
-      baseName += ' w-auto h-full'
-    }
-    if (containerRatio <= imageRatio) {
-      baseName += ' w-full h-auto'
-    }
-    setImageClass(baseName)
-  }, [containerRatio, imageRatio])
-
-  if (isLoading || data === null || blobUrl === null) {
+  if (isLoading || data === null) {
     return null
   }
 
   return (
-    <div ref={callbackRef} className="relative w-full h-full overflow-hidden">
-      <img alt={alt} className={imageClass} src={blobUrl} loading="lazy" />
-    </div>
+    // <div className="">
+    <img
+      alt={alt}
+      className="'relative w-full h-full overflow-hidden'"
+      style={{ objectFit: 'cover' }}
+      src={src}
+      loading="lazy"
+    />
+    // </div>
   )
 }
 
